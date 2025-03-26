@@ -1,10 +1,12 @@
+const { query } = require('express');
 const express = require('express');
 
 const app  = express();
 
 
 // this will only handle GET requests to /user
-app.get("/user", (req, res) => {
+app.get("/user/:userId", (req, res) => {
+    console.log(req.params)
      res.send({firstName : "Ashwin", lastName : "Jain"});
 })
 
