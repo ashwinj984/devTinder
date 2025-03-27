@@ -2,25 +2,17 @@ const { query } = require('express');
 const express = require('express');
 
 const app  = express();
+const { adminAuth, userAuth } = require('./middlewares/auth')
+
+
+app.use("/admin",adminAuth)
 
 
 // this will only handle GET requests to /user
-app.get("/user/:userId", (req, res) => {
-    console.log(req.params)
-     res.send({firstName : "Ashwin", lastName : "Jain"});
+app.get("/user", userAuth, (req, res) => {
+    console.log("handling the route user!!")
+    res.send("Hello User")
 })
-
-app.post("/user", (req, res) => {
-    console.log("Save data to the database")
-    res.send("User data saved successfully");
-})
-
-
-
-// this will match all the HTTP method API calls to /test
-app.use("/test",(req, res) => {
-    res.send("Hello from the test side");
-});
 
 
 app.listen(7777,() => {
