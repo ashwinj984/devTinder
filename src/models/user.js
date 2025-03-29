@@ -2,68 +2,68 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
-    firstName : {
-        type : String,
-        required : true,
-        minLength : 4,
-        maxLength : 50,
+    firstName: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 50,
     },
-    lastName :{
-        type : String,
+    lastName: {
+        type: String,
     },
-    emailId : {
-        type : String,
-        required : true,
-        unique : true,
-        lowercase : true,
-        trim : true,
-        validate(value){
-            if(!validator.isEmail(value)){
+    emailId: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
                 throw new Error("Email is not valid");
             }
         }
     },
-    password : {
-        type : String,
-        required : true,
-        validate(value){
-            if(!validator.isStrongPassword(value)){
+    password: {
+        type: String,
+        required: true,
+        validate(value) {
+            if (!validator.isStrongPassword(value)) {
                 throw new Error("Password is not strong enough");
             }
         }
     },
-    age : {
+    age: {
         type: Number,
-        min : 18,
+        min: 18,
     },
-    gender : {
-        type : String,
-        validate(value){
-            if(!["male","female","others"].includes(value)){
+    gender: {
+        type: String,
+        validate(value) {
+            if (!["male", "female", "others"].includes(value)) {
                 throw new Error("Gender data is not Valid");
             }
         },
     },
-    photoUrl : {
-        type : String,
-        validate(value){
-            if(!validator.isURL(value)){
+    photoUrl: {
+        type: String,
+        validate(value) {
+            if (!validator.isURL(value)) {
                 throw new Error("URL is not valid");
             }
         }
     },
-    about : {
-        type : String,
-        default : "This is a default description of the user",
+    about: {
+        type: String,
+        default: "This is a default description of the user",
     },
-    skills : {
-        type : [String],
+    skills: {
+        type: [String],
     },
 
-},{
-    timestamps : true,
+}, {
+    timestamps: true,
 });
 
-const User = mongoose.model("User",userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
