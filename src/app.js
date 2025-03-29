@@ -8,6 +8,7 @@ const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const { userAuth } = require('./middlewares/auth')
 
 // parse data to json then only we will be able to read it
 app.use(express.json());
@@ -43,25 +44,10 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", userAuth, async (req, res) => {
     try {
-        const { emailId, password } = req.body;
-        const user = await User.findOne({ emailId: emailId });
-        if (!user) {
-            throw new Error("Invalid credentials");
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password)
-        if (isPasswordValid) {
-
-            // Create a JWT token
-            const token = await jwt.sign({ _id: user._id }, "DEV@Tinder$8546");
-            // Add the token to cookie and send the response back to the user
-            res.cookie("token", token);
-            res.send("Login Successful!!!");
-        } else {
-            throw new Error("Invalid credentials");
-        }
+        const user = req.user;
+        res.send(user);
     } catch (err) {
         res.status(400).send("Error: " + err.message)
     }
